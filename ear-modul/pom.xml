@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ear-modul</artifactId>
+    <packaging>ear</packaging>
+
+    <parent>
+        <artifactId>casedb</artifactId>
+        <groupId>shu</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <fileName>casedb</fileName>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>shu</groupId>
+            <artifactId>war-modul</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-ear-plugin</artifactId>
+            <version>2.10.1</version>
+            <configuration>
+            <!--<earName>dbcopy-${project.version}</earName>-->
+                <earName>${fileName}</earName>
+                <defaultLibBundleDir>lib</defaultLibBundleDir>
+                <archive>
+                    <manifestEntries />
+                </archive>
+                <packagingExcludes />
+                <modules>
+                    <webModule>
+                        <groupId>shu</groupId>
+                        <artifactId>war-modul</artifactId>
+                        <contextRoot>/</contextRoot>
+                    </webModule>
+                </modules>
+            </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${deploy.path}</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>${fileName}.${project.packaging}</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

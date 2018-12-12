@@ -24,28 +24,45 @@
     <groupId>shu</groupId>
     <artifactId>casedb</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
 
-    <name>Basic Template for using GWT Material Design</name>
-    <url>https://github.com/GwtMaterialDesign</url>
+    <modules>
+        <module>war-modul</module>
+        <module>ear-modul</module>
+    </modules>
+
+    <profiles>
+        <profile>
+            <id>total-rest</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <modules>
+                <module>war-modul</module>
+                <module>ear-modul</module>
+            </modules>
+        </profile>
+    </profiles>
 
     <properties>
         <app.id>casedb</app.id>
         <app.version>1</app.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gwt.version>2.8.2</gwt.version>
+        <gwt.version>2.8.1</gwt.version>
         <gwtp.version>1.5.3</gwtp.version>
         <gin.version>2.1.2</gin.version>
-        <gwt-material.version>2.0.1</gwt-material.version>
-        <gwt.style>OBF</gwt.style>
+        <gwt-material.version>2.1.1</gwt-material.version>
+        <deploy.path>d:/java/wildfly101/standalone/deployments</deploy.path>
+        <version.jboss.bom>10.1.0.Final</version.jboss.bom>
+        <!--<gwt.style>OBF</gwt.style>-->
 
         <!-- maven -->
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
-        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
 
         <target.jdk>1.8</target.jdk>
 
-        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+        <!--<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>-->
     </properties>
 
     <repositories>
@@ -62,7 +79,7 @@
     </repositories>
 
     <build>
-        <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+        <!--<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>-->
 
         <resources>
             <resource>
@@ -82,99 +99,24 @@
                 </configuration>
             </plugin>
 
-            <!-- GWT -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>${gwt.version}</version>
-                <configuration>
-                    <strict>true</strict>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-ejb-plugin</artifactId>-->
+                <!--<version>2.5.1</version>-->
+                <!--<configuration>-->
+                    <!--<ejbVersion>3.1</ejbVersion>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
 
-                    <testTimeOut>180</testTimeOut>
-                    <mode>htmlunit</mode>
-                    <includes>**/*GwtTest.java</includes>
-
-                    <logLevel>INFO</logLevel>
-
-                    <runTarget>index.html</runTarget>
-                    <module>shu.casedb.GwtMaterialBasic</module>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
 
     <dependencies>
-        <!-- GWT -->
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-servlet</artifactId>
-            <version>${gwt.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <version>${gwt.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <version>${gwt.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- JDT -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- GWTP -->
-        <dependency>
-            <groupId>com.gwtplatform</groupId>
-            <artifactId>gwtp-mvp-client</artifactId>
-            <version>${gwtp.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- GwtMaterial -->
-        <dependency>
-            <groupId>com.github.gwtmaterialdesign</groupId>
-            <artifactId>gwt-material</artifactId>
-            <version>${gwt-material.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.gwtmaterialdesign</groupId>
-            <artifactId>gwt-material-themes</artifactId>
-            <version>${gwt-material.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.gwtmaterialdesign</groupId>
-            <artifactId>gwt-material-addins</artifactId>
-            <version>${gwt-material.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.gwtmaterialdesign</groupId>
-            <artifactId>gwt-material-table</artifactId>
-            <version>${gwt-material.version}</version>
-        </dependency>
-
-        <!-- DI -->
-        <dependency>
-            <groupId>com.google.gwt.inject</groupId>
-            <artifactId>gin</artifactId>
-            <version>${gin.version}</version>
             <scope>provided</scope>
         </dependency>
 
