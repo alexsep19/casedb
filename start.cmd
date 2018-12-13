@@ -1,0 +1,1 @@
+d:\java\pgsql104\bin\pg_ctl -w -D d:\java\pgsql104\data -l logfile start

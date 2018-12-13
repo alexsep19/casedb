@@ -1,0 +1,1 @@
+d:\java\pgsql104\bin\pg_ctl stop -m f -D d:\java\pgsql104\data
