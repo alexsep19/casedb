@@ -4,7 +4,7 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
     <!--<persistence-unit name="jpaAdmino" transaction-type="RESOURCE_LOCAL">-->
     <persistence-unit name="jpaAdmino" transaction-type="JTA">
-        <jta-data-source>java:/rssXADS</jta-data-source>
+        <jta-data-source>java:/adminoXADS</jta-data-source>
         <class>admino.Actions</class>
         <class>admino.Actro</class>
         <class>admino.ActroId</class>

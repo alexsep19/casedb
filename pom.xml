@@ -30,6 +30,7 @@
         <module>war-modul</module>
         <module>ear-modul</module>
         <module>jpa-modul</module>
+        <module>ejb-modul</module>
     </modules>
 
     <profiles>
@@ -40,6 +41,7 @@
             </activation>
             <modules>
                 <module>jpa-modul</module>
+                <module>ejb-modul</module>
                 <module>war-modul</module>
                 <module>ear-modul</module>
             </modules>
@@ -77,7 +79,8 @@
         <deploy.path>d:/java/wildfly101/standalone/deployments</deploy.path>
         <version.jboss.bom>10.1.0.Final</version.jboss.bom>
         <!--<gwt.style>OBF</gwt.style>-->
-
+        <resteasy.version>3.0.12.Final</resteasy.version>
+        <log4j.version>1.2.17</log4j.version>
         <!-- maven -->
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
         <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
@@ -141,19 +144,45 @@
             <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.hibernate</groupId>-->
-            <!--<artifactId>hibernate-core</artifactId>-->
-            <!--<version>5.2.10.Final</version>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.hibernate</groupId>-->
-            <!--<artifactId>hibernate-validator</artifactId>-->
-            <!--<version>5.0.0.Final</version>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.2.10.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.0.0.Final</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- RestEasy -->
+        <dependency>
+        <groupId>org.jboss.resteasy</groupId>
+        <artifactId>jaxrs-api</artifactId>
+        <version>${resteasy.version}</version>
+        <scope>provided</scope>
+        </dependency>
 
         <!-- JUnit -->
         <dependency>
