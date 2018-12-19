@@ -1,6 +1,7 @@
 package admino;
 
 import api.AbstractEntity;
+import org.codehaus.jackson.annotate.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name="users")
+//@XmlRootElement(name="users")
 public class Users extends AbstractEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")
