@@ -23,6 +23,7 @@
         "http://gwtproject.org/doctype/2.7.0/gwt-module.dtd">
 <module rename-to='GwtMaterialBasic'>
     <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.google.gwt.inject.Inject'/>
     <inherits name="com.gwtplatform.mvp.MvpWithEntryPoint"/>
 
     <extend-configuration-property name="gin.ginjector.modules"
@@ -38,5 +39,9 @@
     <inherits name="gwt.material.design.addins.GwtMaterialAddinsDebug"/>
     <inherits name="gwt.material.design.GwtMaterialTableDebug"/>
 
-    <set-configuration-property name="CssResource.enableGss" value="true"/>
+    <inherits name="org.fusesource.restygwt.RestyGWT"/>
+
+    <!--<set-configuration-property name="CssResource.enableGss" value="true"/>-->
+    <!--<inherits name="shu.casesdb.client.Resources"/>-->
+    <extend-property name="locale" values="ru"/>
 </module>

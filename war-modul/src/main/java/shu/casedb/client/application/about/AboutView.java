@@ -1,8 +1,10 @@
+package shu.casedb.client.application.about;
+
 /*
  * #%L
  * GwtMaterial
  * %%
- * Copyright (C) 2015 - 2018 GwtMaterialDesign
+ * Copyright (C) 2015 - 2016 GwtMaterialDesign
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +19,19 @@
  * limitations under the License.
  * #L%
  */
-package shu.casedb.client.application.home;
 
-import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 
-public class HomeModule extends AbstractPresenterModule {
-    @Override
-    protected void configure() {
-        bindPresenter(HomePresenter.class, HomePresenter.MyView.class, HomeView.class,
-                HomePresenter.MyProxy.class);
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.ViewImpl;
+
+public class AboutView extends ViewImpl implements AboutPresenter.MyView {
+    public interface Binder extends UiBinder<Widget, AboutView> {
+    }
+
+    @Inject
+    AboutView(Binder uiBinder) {
+        initWidget(uiBinder.createAndBindUi(this));
     }
 }

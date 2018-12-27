@@ -37,7 +37,7 @@
         <profile>
             <id>total-rest</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
                 <module>jpa-modul</module>
@@ -193,11 +193,11 @@
             <!--<scope>provided</scope>-->
         <!--</dependency>-->
 
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.13</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.codehaus.jackson</groupId>-->
+            <!--<artifactId>jackson-core-asl</artifactId>-->
+            <!--<version>1.9.13</version>-->
+        <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>org.codehaus.jackson</groupId>-->
             <!--<artifactId>jackson-mapper-asl</artifactId>-->

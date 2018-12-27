@@ -1,36 +1,20 @@
-package admino;
+package shu.casedb.client.dto;
 
-import api.AbstractEntity;
-//import org.codehaus.jackson.annotate.JsonBackReference;
-
-import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
 
 /**
- * Created by er22317 on 13.12.2018.
+ * Created by er22317 on 26.12.2018.
  */
-@Entity
-@Table(name="users")
-//@XmlRootElement(name="users")
-public class Users extends AbstractEntity<Long> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")
-    @SequenceGenerator(name = "user_seq_gen", sequenceName = "users_id_seq", allocationSize=1)
+public class UsersDto {
     private Long id;
     private String mail;
     private String name;
     private String password;
     private String fio;
     private String locked;
-    @Temporal(TemporalType.TIMESTAMP)
     private Date created;
 
-    @OneToMany(mappedBy="user", cascade=CascadeType.REMOVE, fetch=FetchType.LAZY)
 //    @JsonBackReference
-    private List<Urro> urros;
-
-
     public String getMail() {
         return mail;
     }
@@ -79,7 +63,7 @@ public class Users extends AbstractEntity<Long> {
         this.created = created;
     }
 
-    public Users() {
+    public UsersDto() {
     }
 
     public Long getId() {
@@ -89,6 +73,5 @@ public class Users extends AbstractEntity<Long> {
     public void setId(Long id) {
         this.id = id;
     }
-
 
 }

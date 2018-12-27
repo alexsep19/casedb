@@ -26,20 +26,25 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.ContentSlot;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
+import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.proxy.Proxy;
 import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
+import shu.casedb.client.event.SetPageTitleEvent;
 
 public class ApplicationPresenter
-        extends Presenter<ApplicationPresenter.MyView, ApplicationPresenter.MyProxy> {
+        extends Presenter<ApplicationPresenter.MyView, ApplicationPresenter.MyProxy>
+        implements SetPageTitleEvent.SetPageTitleHandler{
     interface MyView extends View {
+        void setPageTitle(String title);
     }
 
     @ProxyStandard
     interface MyProxy extends Proxy<ApplicationPresenter> {
     }
 
-    @ContentSlot
-    public static final GwtEvent.Type<RevealContentHandler<?>> SLOT_MAIN = new GwtEvent.Type<>();
+//    @ContentSlot
+//    public static final GwtEvent.Type<RevealContentHandler<?>> SLOT_MAIN = new GwtEvent.Type<>();
+    public static final NestedSlot SLOT_MAIN = new NestedSlot();
 
     @Inject
     ApplicationPresenter(
@@ -47,5 +52,21 @@ public class ApplicationPresenter
             MyView view,
             MyProxy proxy) {
         super(eventBus, view, proxy, RevealType.Root);
+    }
+
+    @Override
+    protected void onBind() {
+        super.onBind();
+        addRegisteredHandler(SetPageTitleEvent.TYPE, this);
+    }
+
+    @Override
+    protected void onReveal() {
+        super.onReveal();
+    }
+
+    @Override
+    public void onSetPageTitle(SetPageTitleEvent event) {
+        getView().setPageTitle(event.getTitle());
     }
 }

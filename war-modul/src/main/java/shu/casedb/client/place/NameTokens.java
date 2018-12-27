@@ -20,5 +20,15 @@
 package shu.casedb.client.place;
 
 public class NameTokens {
-    public static final String HOME = "/";
+    //    public static final String HOME = "/";
+    public static final String about = "about";
+    public static final String users = "users";
+
+    public static String getUsers() {
+        return users;
+    }
+
+    public static String getAbout() {
+        return about;
+    }
 }

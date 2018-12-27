@@ -1,0 +1,55 @@
+<!--
+  #%L
+  GwtMaterial
+  %%
+  Copyright (C) 2015 - 2016 GwtMaterialDesign
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.marginTop="20" 
+  #L%
+  -->
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder' 
+			 xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:m="urn:import:gwt.material.design.client.ui">
+<!--              
+  <ui:with field="tokens" type="shu.cases2.client.place.NameTokens"/>
+  <ui:with field='res' type='shu.cases2.client.resources.AppResources' />
+ -->             
+<m:MaterialRow>
+        <m:MaterialColumn grid="s12">
+            <m:MaterialRow addStyleNames="code">
+               <m:MaterialTitle scrollspy="context_menu" title="Юзеры"/>
+                <m:table.MaterialDataTable ui:field="tableUsers"
+                                           marginTop="20"
+                                           height="calc(100vh - 400px)"
+                                           shadow="1"
+                						   useStickyHeader="true"
+                                           useCategories="false"
+                                           useRowExpansion="false"
+                                           selectionType="SINGLE"/>
+            </m:MaterialRow>
+
+            <m:MaterialRow addStyleNames="code">
+                <m:MaterialTitle scrollspy="context_menu" title="Роли"/>
+                <m:table.MaterialDataTable ui:field="tableRoles"
+                                           marginTop="20"
+                                           height="calc(100vh - 400px)"
+                                           shadow="1"
+                                           useStickyHeader="true"
+                                           useCategories="false"
+                                           useRowExpansion="false"
+                                           selectionType="SINGLE"/>
+            </m:MaterialRow>
+         </m:MaterialColumn>
+
+    </m:MaterialRow>
+</ui:UiBinder>

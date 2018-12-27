@@ -21,21 +21,47 @@ package shu.casedb.client.application;
 
 import javax.inject.Inject;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewImpl;
+import gwt.material.design.client.ui.MaterialNavBrand;
+import org.fusesource.restygwt.client.Defaults;
 
 public class ApplicationView extends ViewImpl implements ApplicationPresenter.MyView {
     interface Binder extends UiBinder<Widget, ApplicationView> {
     }
 
+    @UiField
+    HTMLPanel content;
+
+    @UiField
+    MaterialNavBrand title;
+
     @Inject
-    ApplicationView(
-            Binder uiBinder) {
+    ApplicationView(Binder uiBinder) {
         initWidget(uiBinder.createAndBindUi(this));
+        bindSlot(ApplicationPresenter.SLOT_MAIN, content);
+        setupResty();
+    }
+
+    @Override
+    public void setPageTitle(String title) {
+        this.title.setText(title);
+    }
+
+    private void setupResty() {
+//    	final ClientConfig clientConfig = new ClientConfig();
+//        clientConfig.register(MultiPartFeature.class);
+//        Client client = ClientFactory.newClient(clientConfig);
+
+        Defaults.setServiceRoot(GWT.getHostPageBaseURL());
+//        Defaults.setServiceRoot(GWT.getModuleBaseURL());
+        Defaults.setDateFormat(null);
     }
 
 }

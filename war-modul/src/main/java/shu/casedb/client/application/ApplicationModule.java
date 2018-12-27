@@ -19,13 +19,15 @@
  */
 package shu.casedb.client.application;
 
-import shu.casedb.client.application.home.HomeModule;
+import shu.casedb.client.application.about.AboutModule;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
+import shu.casedb.client.application.users.TableModuleUsers;
 
 public class ApplicationModule extends AbstractPresenterModule {
     @Override
     protected void configure() {
-        install(new HomeModule());
+        install(new AboutModule());
+        install(new TableModuleUsers());
 
         bindPresenter(ApplicationPresenter.class, ApplicationPresenter.MyView.class, ApplicationView.class,
                 ApplicationPresenter.MyProxy.class);
