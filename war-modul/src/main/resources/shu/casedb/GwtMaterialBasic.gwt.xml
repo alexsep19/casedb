@@ -34,6 +34,7 @@
     <source path='shared'/>
 
     <!--GWT Material-->
+    <inherits name="gwt.material.design.GwtMaterialDesign"/>
     <inherits name="gwt.material.design.GwtMaterialWithJQueryDebug"/>
     <inherits name="gwt.material.design.themes.ThemeBlue"/>
     <inherits name="gwt.material.design.addins.GwtMaterialAddinsDebug"/>
@@ -41,7 +42,13 @@
 
     <inherits name="org.fusesource.restygwt.RestyGWT"/>
 
+    <add-linker name="xsiframe" />
+    <set-configuration-property name="devModeRedirectEnabled" value="true" />
+    <!--<set-property name="compiler.useSourceMaps" value="true" />-->
     <!--<set-configuration-property name="CssResource.enableGss" value="true"/>-->
     <!--<inherits name="shu.casesdb.client.Resources"/>-->
     <extend-property name="locale" values="ru"/>
+    <inherits name="com.google.gwt.logging.Logging"/>
+    <set-property name="gwt.logging.logLevel" value="ALL"/>
+    <set-property name="gwt.logging.enabled" value="TRUE"/>
 </module>

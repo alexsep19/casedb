@@ -105,6 +105,16 @@
             <artifactId>gwt-material-table</artifactId>
             <version>${gwt-material.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.gwtmaterialdesign</groupId>
+            <artifactId>gwt-material-jquery</artifactId>
+            <version>${gwt-material.version}</version>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.github.gwtmaterialdesign</groupId>-->
+            <!--<artifactId>gwt-material-jquery</artifactId>-->
+            <!--<version>2.1.1-sources</version>-->
+        <!--</dependency>-->
 
         <!-- DI -->
         <dependency>
@@ -112,6 +122,7 @@
             <artifactId>gin</artifactId>
             <version>${gin.version}</version>
         </dependency>
+
         <dependency>
             <groupId>shu</groupId>
             <artifactId>jpa-modul</artifactId>

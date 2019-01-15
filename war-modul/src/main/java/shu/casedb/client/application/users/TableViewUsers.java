@@ -2,12 +2,13 @@ package shu.casedb.client.application.users;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -23,20 +24,30 @@ import gwt.material.design.client.ui.table.MaterialDataTable;
 import gwt.material.design.client.ui.table.cell.TextColumn;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
+import shu.casedb.client.application.users.custom.RolesRowFactory;
 import shu.casedb.client.application.users.custom.CustomRenderer;
-import shu.casedb.client.application.users.custom.PersonRowFactory;
+import shu.casedb.client.application.users.custom.UsersRowFactory;
+import shu.casedb.client.dto.RolesDto;
 import shu.casedb.client.dto.UsersDto;
+import shu.casedb.client.rest.RoleRestClient;
 import shu.casedb.client.rest.UserRestClient;
+
+import javax.management.relation.Role;
 
 public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyView {
 
 		public interface Binder extends UiBinder<Widget, TableViewUsers> {
 	    }
 	    UserRestClient userRestClient = GWT.create(UserRestClient.class);
+        RoleRestClient roleRestClient = GWT.create(RoleRestClient.class);
 
 		@UiField
 	    MaterialDataTable<UsersDto> tableUsers;
-    
+	    @UiField
+		MaterialDataTable<RolesDto> tableRoles;
+
+		private static Logger rootLogger = Logger.getLogger("TableViewUsers");
+
 //		EditWindow<Users> editWindow = new EditWindow<Users>("560px", "180px"){
 //		   @Override
 //		   public void saveModel(Person person, AsyncCallback<List<Person>> asyncCallback){
@@ -49,13 +60,86 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 		
 	    @Inject
 		TableViewUsers(Binder uiBinder) {
-	        initWidget(uiBinder.createAndBindUi(this));
+			initWidget(uiBinder.createAndBindUi(this));
 
-			tableUsers.setRowFactory(new PersonRowFactory());
+//			rootLogger.log(Level.INFO, "Started");
+			MakeUsersTable();
+			MakeRolesTable();
+		}
+
+		void MakeRolesTable(){
+			tableRoles.setRowFactory(new RolesRowFactory());
+			tableRoles.setRenderer(new CustomRenderer<>());
+			tableRoles.getTableTitle().setText("Роли");
+			TextColumn tcId = new TextColumn<RolesDto>() {
+				@Override
+				public boolean numeric() {
+					return true;
+				}
+				@Override
+				public HideOn hideOn() {
+					return HideOn.HIDE_ON_MED_DOWN;
+				}
+				@Override
+				public Comparator<? super RowComponent<RolesDto>> sortComparator() {
+					return (o1, o2) -> o1.getData().getId().compareTo(o2.getData().getId());
+				}
+				@Override
+				public String getValue(RolesDto object) {
+					return object.getId().toString();
+				}
+			};
+			tableRoles.addColumn( tcId, "id");
+
+			TextColumn tcName = new TextColumn<RolesDto>() {
+				@Override
+				public Comparator<? super RowComponent<RolesDto>> sortComparator() {
+					return (o1, o2) -> o1.getData().getCode().compareToIgnoreCase(o2.getData().getCode());
+				}
+				@Override
+				public String getValue(RolesDto object) {
+					return object.getCode();
+				}
+			};
+			tableRoles.addColumn( tcName, "Name");
+
+		}
+
+		void MakeUsersTable(){
+
+			tableUsers.setRowFactory(new UsersRowFactory());
 			tableUsers.setRenderer(new CustomRenderer<>());
+			tableUsers.getTableTitle().setText("Пользователи");
 
-			tableUsers.getTableTitle().setText("Таблица без страниц");
-	        
+			TextColumn tcId = new TextColumn<UsersDto>() {
+				@Override
+				public boolean numeric() {
+					return true;
+				}
+				@Override
+				public HideOn hideOn() {
+					return HideOn.HIDE_ON_MED_DOWN;
+				}
+				@Override
+				public Comparator<? super RowComponent<UsersDto>> sortComparator() {
+					return (o1, o2) -> o1.getData().getId().compareTo(o2.getData().getId());
+				}
+				@Override
+				public String getValue(UsersDto object) {
+					return object.getId().toString();
+				}
+			};
+			tableUsers.addColumn( tcId, "id");
+//	        editWindow.addField( tcPhone, new EditField<Person>(){
+//	        	@Override
+//	        	public void setField(Person model){
+//	        		setFieldValue(model.getPhone());
+//	        	}
+//	        	@Override
+//	        	public void getField(Person model){
+//	        		model.setPhone((String)getFieldValue());
+//	        	}
+//	        }, 20);
 	        TextColumn tcName = new TextColumn<UsersDto>() {
 	            @Override
 	            public Comparator<? super RowComponent<UsersDto>> sortComparator() {
@@ -101,38 +185,7 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 //	        	}
 //	        }, 20);
 
-	        TextColumn tcId = new TextColumn<UsersDto>() {
-	            @Override
-	            public boolean numeric() {
-	                return true;
-	            }
-	            @Override
-	            public HideOn hideOn() {
-	                return HideOn.HIDE_ON_MED_DOWN;
-	            }
-	            @Override
-	            public Comparator<? super RowComponent<UsersDto>> sortComparator() {
-	                return (o1, o2) -> o1.getData().getId().compareTo(o2.getData().getId());
-	            }
-	            @Override
-	            public String getValue(UsersDto object) {
-	                return object.getId().toString();
-	            }
-	        };
-			tableUsers.addColumn( tcId, "id");
-//	        editWindow.addField( tcPhone, new EditField<Person>(){
-//	        	@Override
-//	        	public void setField(Person model){
-//	        		setFieldValue(model.getPhone());
-//	        	}
-//	        	@Override
-//	        	public void getField(Person model){
-//	        		model.setPhone((String)getFieldValue());
-//	        	}
-//	        }, 20);
-	        
 //	        table.setVisibleRange(0, 10);
-	        refreshTable();
 
 			tableUsers.addColumnSortHandler(event -> {
 	            GWT.log("Sorted: " + event.getSortContext().getSortDir() + ", columnIndex: " + event.getColumnIndex());
@@ -183,9 +236,25 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 	        });
 	        panel.add(addIcon);
 	        panel.add(delIcon);
+			refreshUsersTable();
 	    }
-	    
-	    private void refreshTable(){
+
+	private void refreshRolesTable(){
+		roleRestClient.getList(new MethodCallback<List<RolesDto>>(){
+			@Override
+			public void onFailure(Method method, Throwable throwable) {
+				Window.alert("Load failure = " + throwable + "; "+throwable.getMessage());
+			}
+			@Override
+			public void onSuccess(Method method, List<RolesDto> roles) {
+			    tableRoles.setRowData(0, roles);
+			}
+		});
+
+	}
+
+
+	private void refreshUsersTable(){
 			userRestClient.getList(new MethodCallback<List<UsersDto>>(){
 				@Override
 				public void onFailure(Method method, Throwable throwable) {
@@ -197,16 +266,6 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 				}
 			});
 
-//			svc.getPersons(new AsyncCallback<List<Users>>(){
-//			@Override
-//			public void onFailure(Throwable exception) {
-//				Window.alert("Load failure" + exception);
-//			}
-//			@Override
-//			public void onSuccess(List<Users> loadPage) {
-//		    	table.setRowData(0, loadPage);
-//			}
-//		});
 	    }
 
 }

@@ -25,7 +25,7 @@ import gwt.material.design.client.data.component.RowComponent;
 import gwt.material.design.client.data.factory.RowComponentFactory;
 import shu.casedb.client.dto.UsersDto;
 
-public class PersonRowFactory extends RowComponentFactory<UsersDto> {
+public class UsersRowFactory extends RowComponentFactory<UsersDto> {
 
     @Override
     public RowComponent<UsersDto> generate(DataView dataView, UsersDto model) {
