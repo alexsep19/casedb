@@ -1,4 +1,6 @@
 .idea/*
 *.iml
-ear-modul\target\
-/war-modul/target/.generated/shu/casedb/client/resources
+/ear-modul/target/
+/war-modul/target/
+/ejb-modul/target/
+/jpa-modul/target/
