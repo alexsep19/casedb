@@ -8,6 +8,7 @@ import shu.casedb.server.rest.api.IRestApiMediaType;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Path("/users")
@@ -44,8 +45,23 @@ public class UserRest extends AbstractEntityRest<Long, Users, UsersDao> {
 //        return list(offset,length);
 //    }
 
-//    @POST
-//    public void create(User user){
-//        create(user);
-//    }
+    @POST
+    public List<Users> add(Users user){
+        user.setLocked("N");
+        user.setCreated(new Date());
+        create(user);
+        return listAll();
+    }
+
+    @PUT
+    public List<Users> edit(Users user){
+        update(user);
+        return listAll();
+    }
+
+    @DELETE
+    public List<Users> delete(Users user){
+        super.delete(user.getId());
+        return listAll();
+    }
 }

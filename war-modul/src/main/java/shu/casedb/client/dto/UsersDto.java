@@ -63,9 +63,6 @@ public class UsersDto {
         this.created = created;
     }
 
-    public UsersDto() {
-    }
-
     public Long getId() {
         return id;
     }
@@ -74,4 +71,13 @@ public class UsersDto {
         this.id = id;
     }
 
+    public UsersDto() {
+    }
+    public UsersDto(Long id, String mail, String name, String password, String fio) {
+        this.id = id;
+        this.mail = mail;
+        this.name = name;
+        this.password = password;
+        this.fio = fio;
+    }
 }

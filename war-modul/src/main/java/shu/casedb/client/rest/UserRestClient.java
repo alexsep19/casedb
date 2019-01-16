@@ -5,8 +5,7 @@ import org.fusesource.restygwt.client.MethodCallback;
 import org.fusesource.restygwt.client.RestService;
 import shu.casedb.client.dto.UsersDto;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import java.util.List;
 
 /**
@@ -18,4 +17,12 @@ public interface UserRestClient extends RestService {
     @Path("/all")
     public void getList(MethodCallback<List<UsersDto>> callback);
 
+    @POST
+    public void add(UsersDto usersDto, MethodCallback<List<UsersDto>> callback);
+
+    @PUT
+    public void edit(UsersDto usersDto, MethodCallback<List<UsersDto>> callback);
+
+    @DELETE
+    public void delete(UsersDto usersDto, MethodCallback<List<UsersDto>> callback);
 }

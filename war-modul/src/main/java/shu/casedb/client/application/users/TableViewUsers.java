@@ -9,6 +9,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -27,6 +28,9 @@ import org.fusesource.restygwt.client.MethodCallback;
 import shu.casedb.client.application.users.custom.RolesRowFactory;
 import shu.casedb.client.application.users.custom.CustomRenderer;
 import shu.casedb.client.application.users.custom.UsersRowFactory;
+import shu.casedb.client.application.wintools.ApproveDialog;
+import shu.casedb.client.application.wintools.EditField;
+import shu.casedb.client.application.wintools.EditWindow;
 import shu.casedb.client.dto.RolesDto;
 import shu.casedb.client.dto.UsersDto;
 import shu.casedb.client.rest.RoleRestClient;
@@ -48,15 +52,18 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 
 		private static Logger rootLogger = Logger.getLogger("TableViewUsers");
 
-//		EditWindow<Users> editWindow = new EditWindow<Users>("560px", "180px"){
-//		   @Override
-//		   public void saveModel(Person person, AsyncCallback<List<Person>> asyncCallback){
-//			   svc.savePerson( person, asyncCallback);
-//		   }
-//		   public void fillTable(List<Person> loadPage){
-//			   table.setRowData(0, loadPage);
-//		   }
-//		};
+		EditWindow<UsersDto> editWindow = new EditWindow<UsersDto>("560px", "180px"){
+		    @Override
+		    public void saveModel(UsersDto usersDto, MethodCallback<List<UsersDto>> methodCallback){
+                if (getWindowType().equals(WindowType.EDIT))
+                    userRestClient.edit(usersDto, methodCallback);
+                else
+                    userRestClient.add(usersDto, methodCallback);
+		    }
+		    public void fillTable(List<UsersDto> loadPage){
+                tableUsers.setRowData(0, loadPage);
+		    }
+		};
 		
 	    @Inject
 		TableViewUsers(Binder uiBinder) {
@@ -91,7 +98,7 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 			};
 			tableRoles.addColumn( tcId, "id");
 
-			TextColumn tcName = new TextColumn<RolesDto>() {
+			TextColumn tcCode = new TextColumn<RolesDto>() {
 				@Override
 				public Comparator<? super RowComponent<RolesDto>> sortComparator() {
 					return (o1, o2) -> o1.getData().getCode().compareToIgnoreCase(o2.getData().getCode());
@@ -101,8 +108,9 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 					return object.getCode();
 				}
 			};
-			tableRoles.addColumn( tcName, "Name");
+			tableRoles.addColumn( tcCode, "Name");
 
+            refreshRolesTable();
 		}
 
 		void MakeUsersTable(){
@@ -130,16 +138,7 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 				}
 			};
 			tableUsers.addColumn( tcId, "id");
-//	        editWindow.addField( tcPhone, new EditField<Person>(){
-//	        	@Override
-//	        	public void setField(Person model){
-//	        		setFieldValue(model.getPhone());
-//	        	}
-//	        	@Override
-//	        	public void getField(Person model){
-//	        		model.setPhone((String)getFieldValue());
-//	        	}
-//	        }, 20);
+
 	        TextColumn tcName = new TextColumn<UsersDto>() {
 	            @Override
 	            public Comparator<? super RowComponent<UsersDto>> sortComparator() {
@@ -151,17 +150,17 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 	            }
 	        };
 			tableUsers.addColumn( tcName, "Name");
-//	        editWindow.addField( tcFirstName, new EditField<Person>(){
-//	        	@Override
-//	        	public void setField(Person model){
-//	        		setFocusField();
-//	        		setFieldValue(model.getFirstName());
-//	        	};
-//	        	@Override
-//	        	public void getField(Person model){
-//	        		model.setFirstName((String)getFieldValue());
-//	        	}
-//	        }, 20);
+	        editWindow.addField( tcName, new EditField<UsersDto>(){
+	        	@Override
+	        	public void setField(UsersDto model){
+	        		setFocusField();
+	        		setFieldValue(model.getName());
+	        	};
+	        	@Override
+	        	public void getField(UsersDto model){
+	        		model.setName((String)getFieldValue());
+	        	}
+	        }, 20);
 	        
 	        TextColumn tcFio = new TextColumn<UsersDto>() {
 	            @Override
@@ -174,16 +173,16 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 	            }
 	        };
 			tableUsers.addColumn( tcFio, "ФИО");
-//	        editWindow.addField( tcLastName, new EditField<Person>(){
-//	        	@Override
-//	        	public void setField(Person model){
-//	        		setFieldValue(model.getLastName());
-//	        	};
-//	        	@Override
-//	        	public void getField(Person model){
-//	        		model.setLastName((String)getFieldValue());
-//	        	}
-//	        }, 20);
+	        editWindow.addField( tcFio, new EditField<UsersDto>(){
+	        	@Override
+	        	public void setField(UsersDto model){
+	        		setFieldValue(model.getFio());
+	        	};
+	        	@Override
+	        	public void getField(UsersDto model){
+	        		model.setFio((String)getFieldValue());
+	        	}
+	        }, 20);
 
 //	        table.setVisibleRange(0, 10);
 
@@ -193,21 +192,23 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 	        });
 
 			tableUsers.addRowDoubleClickHandler(event -> {
-	            Window.alert("Row Double Clicked: " + event.getModel().getId());
+//	            Window.alert("Row Double Clicked: " + event.getModel().getId());
 //	            editWindow.setTitle("Редактировать");
-//	            editWindow.setValues(event.getModel());
-//	            editWindow.open();
+                editWindow.setWindowType(EditWindow.WindowType.EDIT);
+	            editWindow.setValues(event.getModel());
+	            editWindow.open();
 	        });
 	        
 	        Panel panel = tableUsers.getScaffolding().getToolPanel();
 	        MaterialIcon addIcon = new MaterialIcon(IconType.ADD);
 	        addIcon.setWaves(WavesType.LIGHT);
 	        addIcon.setCircle(true);
-//	        addIcon.addClickHandler(event ->{
+	        addIcon.addClickHandler(event ->{
+                editWindow.setWindowType(EditWindow.WindowType.ADD);
 //	        	editWindow.setTitle("Создать");
-//	        	editWindow.setValues(new Person(0,"","","",""));
-//	        	editWindow.open();
-//	        });
+	        	editWindow.setValues(new UsersDto(0l,"","","",""));
+	        	editWindow.open();
+	        });
 	        
 	        MaterialIcon delIcon = new MaterialIcon(IconType.DELETE);
 	        delIcon.setWaves(WavesType.LIGHT);
@@ -218,21 +219,22 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 //	        		Window.alert("Необходимо выбрать 1 запись");
 	        		return;
 	        	}
-//	        	ApproveDialog approveDialog = new ApproveDialog("Удалить запись?"){
-//	        		@Override
-//	        		public void processApprove(){
-//		        		svc.delPerson( table.getSelectedRowModels(true).get(0), new AsyncCallback<List<Person>>(){
-//		        			@Override
-//		        			public void onFailure(Throwable exception) {
-//		        				Window.alert("Load failure" + exception);
-//		        			}
-//		        			@Override
-//		        			public void onSuccess(List<Person> loadPage) {
-//					    	table.setRowData(0, loadPage);
-//		        			}
-//		        		});
-//	        		};
-//	        	};
+	        ApproveDialog approveDialog = new ApproveDialog("Удалить запись?"){
+	        	@Override
+	        	public void processApprove(){
+                    userRestClient.delete( tableUsers.getSelectedRowModels(true).get(0), new MethodCallback<List<UsersDto>>(){
+                        @Override
+                        public void onFailure(Method method, Throwable throwable) {
+                            Window.alert("Load failure" + throwable);
+                        }
+
+                        @Override
+                        public void onSuccess(Method method, List<UsersDto> usersDtos) {
+                            tableUsers.setRowData(0, usersDtos);
+                        }
+		       		});
+	        		};
+	        	};
 	        });
 	        panel.add(addIcon);
 	        panel.add(delIcon);
@@ -255,17 +257,17 @@ public class TableViewUsers extends ViewImpl implements TablePresenterUsers.MyVi
 
 
 	private void refreshUsersTable(){
-			userRestClient.getList(new MethodCallback<List<UsersDto>>(){
-				@Override
-				public void onFailure(Method method, Throwable throwable) {
-				    Window.alert("Load failure = " + throwable + "; "+throwable.getMessage());
-				}
-				@Override
-				public void onSuccess(Method method, List<UsersDto> users) {
+		userRestClient.getList(new MethodCallback<List<UsersDto>>(){
+			@Override
+			public void onFailure(Method method, Throwable throwable) {
+			    Window.alert("Load failure = " + throwable + "; "+throwable.getMessage());
+			}
+			@Override
+			public void onSuccess(Method method, List<UsersDto> users) {
 					tableUsers.setRowData(0, users);
 				}
-			});
+		});
 
-	    }
+	}
 
 }
